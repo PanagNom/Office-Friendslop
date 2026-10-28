@@ -77,7 +77,9 @@ namespace Unity.Multiplayer.GettingStarted.PlayerMovement
         private Vector3 GetPlayerMovement()
         {
             var moveDirection = _moveAction?.ReadValue<Vector2>() ?? Vector2.zero;
-            return new Vector3(moveDirection.x, 0, moveDirection.y) * (Speed * Time.deltaTime);
+            // Move relative to where the player is facing (yaw is set by PlayerCameraController)
+            var worldDirection = transform.right * moveDirection.x + transform.forward * moveDirection.y;
+            return worldDirection * (Speed * Time.deltaTime);
         }
 
         [Rpc(SendTo.Owner)]
